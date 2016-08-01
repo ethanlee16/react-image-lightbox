@@ -669,6 +669,16 @@ class ReactImageLightbox extends Component {
             return;
         }
 
+        if (imageSrc.substring(imageSrc.length - 3) === 'pdf') {
+            this.imageCache[imageSrc] = {
+                loaded: true,
+                width: 600,
+                height: 776
+            };
+
+            callback(null, 600, 776);
+        }
+
         const that = this;
         const inMemoryImage = new Image();
 
@@ -876,17 +886,31 @@ class ReactImageLightbox extends Component {
                     </div>
                 );
             } else {
-                images.push(
-                    <img
-                        className={`${imageClass} ${styles.image}`}
-                        onDoubleClick={this.handleImageDoubleClick}
-                        onWheel={this.handleImageMouseWheel}
-                        style={imageStyle}
-                        src={imageSrc}
-                        key={imageSrc + keyEndings[srcType]}
-                        alt={this.props.imageTitle || translate('Image')}
-                    />
-                );
+                if (imageSrc.substring(imageSrc.length - 3) === 'pdf') {
+                    images.push(
+                        <iframe
+                            className={`${imageClass} ${styles.image}`}
+                            onDoubleClick={this.handleImageDoubleClick}
+                            onWheel={this.handleImageMouseWheel}
+                            style={imageStyle}
+                            src={imageSrc}
+                            key={imageSrc + keyEndings[srcType]}
+                            alt={this.props.imageTitle || translate('Image')}
+                        />
+                    );
+                } else {
+                    images.push(
+                        <img
+                            className={`${imageClass} ${styles.image}`}
+                            onDoubleClick={this.handleImageDoubleClick}
+                            onWheel={this.handleImageMouseWheel}
+                            style={imageStyle}
+                            src={imageSrc}
+                            key={imageSrc + keyEndings[srcType]}
+                            alt={this.props.imageTitle || translate('Image')}
+                        />
+                    );
+                }
             }
         };
 
